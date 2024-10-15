@@ -1,9 +1,11 @@
 # /bin/bash
 
 # denpandencies
+echo "download denpandencies with apt"
 sudo apt update -y && sudo apt install curl build-essential -y
 
 # download lookbusy source code
+echo "download lookbusy"
 curl -L http://www.devin.com/lookbusy/download/lookbusy-1.4.tar.gz -o lookbusy-1.4.tar.gz
 if [ ! -f lookbusy-1.4.tar.gz ]; then
 	echo "download lookbusy failed"
@@ -12,6 +14,7 @@ fi
 tar -xzvf lookbusy-1.4.tar.gz
 
 # build lookbusy
+echo "install lookbusy"
 cd lookbusy-1.4
 ./configure
 make
@@ -35,7 +38,12 @@ WantedBy=multi-user.target
 END
 )
 
-sudo echo "${serviceStr}" > /etc/systemd/system/lookbusy.service
+sudo bash -c "echo "${serviceStr}" > /etc/systemd/system/lookbusy.service"
 sudo systemctl daemon-reload
 sudo systemctl start lookbusy.service
 sudo systemctl enable lookbusy.service
+
+# clean up
+cd ..
+rm lookbusy-1.4.tar.gz
+rm -dr lookbusy-1.4
